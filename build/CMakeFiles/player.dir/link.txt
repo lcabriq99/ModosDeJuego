@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/player.dir/main.cpp.o CMakeFiles/player.dir/functions.cpp.o -o player   -L/home/lcabriq/oesia/TB/robocup/_deps/min_sock-src/build  -Wl,-rpath,/home/lcabriq/oesia/TB/robocup/_deps/min_sock-src/build: _deps/min_sock-build/src/libMinimalSocket.a 

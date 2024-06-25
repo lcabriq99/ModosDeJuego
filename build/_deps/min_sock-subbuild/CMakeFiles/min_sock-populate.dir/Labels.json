@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/home/lcabriq/oesia/TB/robocup/build/_deps/min_sock-subbuild/CMakeFiles/min_sock-populate"
+		},
+		{
+			"file" : "/home/lcabriq/oesia/TB/robocup/build/_deps/min_sock-subbuild/CMakeFiles/min_sock-populate.rule"
+		},
+		{
+			"file" : "/home/lcabriq/oesia/TB/robocup/build/_deps/min_sock-subbuild/CMakeFiles/min_sock-populate-complete.rule"
+		},
+		{
+			"file" : "/home/lcabriq/oesia/TB/robocup/build/_deps/min_sock-subbuild/min_sock-populate-prefix/src/min_sock-populate-stamp/min_sock-populate-build.rule"
+		},
+		{
+			"file" : "/home/lcabriq/oesia/TB/robocup/build/_deps/min_sock-subbuild/min_sock-populate-prefix/src/min_sock-populate-stamp/min_sock-populate-configure.rule"
+		},
+		{
+			"file" : "/home/lcabriq/oesia/TB/robocup/build/_deps/min_sock-subbuild/min_sock-populate-prefix/src/min_sock-populate-stamp/min_sock-populate-download.rule"
+		},
+		{
+			"file" : "/home/lcabriq/oesia/TB/robocup/build/_deps/min_sock-subbuild/min_sock-populate-prefix/src/min_sock-populate-stamp/min_sock-populate-install.rule"
+		},
+		{
+			"file" : "/home/lcabriq/oesia/TB/robocup/build/_deps/min_sock-subbuild/min_sock-populate-prefix/src/min_sock-populate-stamp/min_sock-populate-mkdir.rule"
+		},
+		{
+			"file" : "/home/lcabriq/oesia/TB/robocup/build/_deps/min_sock-subbuild/min_sock-populate-prefix/src/min_sock-populate-stamp/min_sock-populate-patch.rule"
+		},
+		{
+			"file" : "/home/lcabriq/oesia/TB/robocup/build/_deps/min_sock-subbuild/min_sock-populate-prefix/src/min_sock-populate-stamp/min_sock-populate-test.rule"
+		},
+		{
+			"file" : "/home/lcabriq/oesia/TB/robocup/build/_deps/min_sock-subbuild/min_sock-populate-prefix/src/min_sock-populate-stamp/min_sock-populate-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"min_sock-populate"
+		],
+		"name" : "min_sock-populate"
+	}
+}
