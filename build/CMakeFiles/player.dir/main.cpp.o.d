@@ -250,4 +250,4 @@ CMakeFiles/player.dir/main.cpp.o: /home/lcabriq/oesia/TB/robocup/main.cpp \
  /usr/include/c++/11/tr1/poly_laguerre.tcc \
  /usr/include/c++/11/tr1/riemann_zeta.tcc \
  /home/lcabriq/oesia/TB/robocup/functions.h \
- /home/lcabriq/oesia/TB/robocup/estructuras.h
+ /home/lcabriq/oesia/TB/robocup/structs.h

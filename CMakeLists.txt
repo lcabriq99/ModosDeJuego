@@ -28,7 +28,7 @@ set(SOURCE_FILES
     main.cpp
     functions.h
     functions.cpp
-    estructuras.h
+    structs.h
 )
 
 add_executable(player ${SOURCE_FILES})
