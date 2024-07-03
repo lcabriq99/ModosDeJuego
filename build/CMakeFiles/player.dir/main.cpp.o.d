@@ -227,7 +227,8 @@ CMakeFiles/player.dir/main.cpp.o: /home/lcabriq/oesia/TB/robocup/main.cpp \
  /usr/include/x86_64-linux-gnu/bits/semaphore.h \
  /usr/include/c++/11/vector /usr/include/c++/11/bits/stl_vector.h \
  /usr/include/c++/11/bits/stl_bvector.h \
- /usr/include/c++/11/bits/vector.tcc /usr/include/c++/11/cmath \
+ /usr/include/c++/11/bits/vector.tcc /usr/include/c++/11/sstream \
+ /usr/include/c++/11/bits/sstream.tcc /usr/include/c++/11/cmath \
  /usr/include/math.h /usr/include/x86_64-linux-gnu/bits/math-vector.h \
  /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h \
  /usr/include/x86_64-linux-gnu/bits/flt-eval-method.h \
@@ -250,4 +251,4 @@ CMakeFiles/player.dir/main.cpp.o: /home/lcabriq/oesia/TB/robocup/main.cpp \
  /usr/include/c++/11/tr1/poly_laguerre.tcc \
  /usr/include/c++/11/tr1/riemann_zeta.tcc \
  /home/lcabriq/oesia/TB/robocup/functions.h \
- /home/lcabriq/oesia/TB/robocup/structs.h
+ /home/lcabriq/oesia/TB/robocup/estructuras.h
