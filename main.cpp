@@ -151,10 +151,12 @@ int main(int argc, char *argv[])
             procesarJugadoresVisibles(see_message, jugadores_visibles);
             mostrarJugadoresVisibles(jugadores_visibles);
         }
-            //APARTIR DE AQUÍ
+
+        //A PARTIR DE AQUÍ
         if (parsed_message[0].find("hear") != string::npos)
         {
-            store_data_hear(parsed_message[0], udp_socket, server_udp); // Llamar función para manejar mensaje 'hear'
+            cout << "Hear message received: " << parsed_message[0] << endl;  // Añadir depuración aquí
+            store_data_hear(parsed_message[0], player, udp_socket, server_udp); // Llamar función para manejar mensaje 'hear'
         }
 
         posicion_anterior_x = posicion_actual_x;

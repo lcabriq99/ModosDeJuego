@@ -6,6 +6,8 @@
 #include<iostream>
 #include <vector>
 
+
+//A PARTIR DE AQUÍ
 struct Player
 {
     std::string team_name;

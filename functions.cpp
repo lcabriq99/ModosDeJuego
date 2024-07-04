@@ -257,13 +257,13 @@ void mostrarJugadoresVisibles(const vector<JugadorCercano> &jugadores_visibles)
 }
 
 
-//APARTIR DE AQUÍ
+//A PARTIR DE AQUÍ
 
-void store_data_hear(string &hear_message, MinimalSocket::udp::Udp<true> &udp_socket, MinimalSocket::Address const &server_udp)
+void store_data_hear(string &hear_message, Player &player, MinimalSocket::udp::Udp<true> &udp_socket, MinimalSocket::Address const &server_udp)
 {
     vector<string> aux_hear_message = separate_string(hear_message); // hear 0 referee kick_off_l
     vector<string> valores_mensaje_Hear;
-
+    
     for (size_t i = 0; i < aux_hear_message.size(); i++)
     {
         if (aux_hear_message[i].find("hear") != string::npos)
@@ -276,7 +276,7 @@ void store_data_hear(string &hear_message, MinimalSocket::udp::Udp<true> &udp_so
                 cout << "MODO: " << valores_mensaje_Hear[3] << endl;
 
                 string modo = valores_mensaje_Hear[3];
-                handle_game_mode(modo, udp_socket, server_udp);
+                handle_game_mode(modo, player, udp_socket, server_udp);
             }
             else
             {
@@ -286,11 +286,9 @@ void store_data_hear(string &hear_message, MinimalSocket::udp::Udp<true> &udp_so
     }
 }
 
-//Para que lo entendais el numero de delante 1 o 2 es el jugador que quiero que ejecute la acción , saque de puerta solo el 1(portero)
-//Saque de banda o corner solo el 2 porque solo pruebo con 2 jugadores asi que se lo asigno al 2
-//Pero no me hace ni puto caso
-void handle_game_mode(const string &modo, MinimalSocket::udp::Udp<true> &udp_socket, MinimalSocket::Address const &server_udp)
+void handle_game_mode(const string &modo, Player &player, MinimalSocket::udp::Udp<true> &udp_socket, MinimalSocket::Address const &server_udp)
 {
+    cout << "Handle game mode: " << modo << endl;  
     if (modo == "kick_off_l" || modo == "kick_off_r")
     {
         cout << "Saque inicial: " << modo << endl;
@@ -298,22 +296,22 @@ void handle_game_mode(const string &modo, MinimalSocket::udp::Udp<true> &udp_soc
     else if (modo == "free_kick_l" || modo == "free_kick_r")
     {
         cout << "Tiro libre: " << modo << endl;
-        execute_free_kick(1, udp_socket, server_udp); // Ejemplo de ejecución de falta
+        execute_free_kick(player, udp_socket, server_udp); 
     }
     else if (modo == "goal_kick_l" || modo == "goal_kick_r")
     {
         cout << "Saque de puerta: " << modo << endl;
-        execute_goal_kick(1, udp_socket, server_udp); // Portero (jugador 1)
+        execute_goal_kick(player, udp_socket, server_udp); // Portero (jugador 1)
     }
     else if (modo == "corner_kick_l" || modo == "corner_kick_r")
     {
         cout << "Saque de esquina: " << modo << endl;
-        execute_corner_kick(2, udp_socket, server_udp); // Jugador 2
+        execute_corner_kick(player, udp_socket, server_udp);
     }
     else if (modo == "throw_in_l" || modo == "throw_in_r")
     {
         cout << "Saque de banda: " << modo << endl;
-        execute_throw_in(2, udp_socket, server_udp); // Jugador 2
+        execute_throw_in(player, udp_socket, server_udp);
     }
     else if (modo == "offside_l" || modo == "offside_r")
     {
@@ -337,30 +335,35 @@ void handle_game_mode(const string &modo, MinimalSocket::udp::Udp<true> &udp_soc
     }
 }
 
-void execute_goal_kick(int player_id, MinimalSocket::udp::Udp<true> &udp_socket, MinimalSocket::Address const &server_udp)
+void execute_goal_kick(Player &player, MinimalSocket::udp::Udp<true> &udp_socket, MinimalSocket::Address const &server_udp)
+{
+    if (player.unum != 1) {
+        cout << "Jugador " << player.unum << " no está autorizado para ejecutar saque de puerta" << endl;
+        return;
+    }
+
+    std::string command = "(kick 100 0)";
+    udp_socket.sendTo(command, server_udp);
+    cout << "Jugador " << player.unum << " ejecuta saque de puerta con potencia 100" << endl;
+}
+
+void execute_throw_in(Player &player, MinimalSocket::udp::Udp<true> &udp_socket, MinimalSocket::Address const &server_udp)
+{
+    std::string command = "(kick 100 180)"; // Potencia 100 y dirección hacia atrás (180 grados) Aunque no hace ni puto caso a 180gr
+    udp_socket.sendTo(command, server_udp);
+    cout << "Jugador " << player.unum << " ejecuta saque de banda con potencia 100 y dirección hacia atrás" << endl;
+}
+
+void execute_corner_kick(Player &player, MinimalSocket::udp::Udp<true> &udp_socket, MinimalSocket::Address const &server_udp)
+{
+    std::string command = "(kick 100 180)"; // Potencia 100 y dirección hacia atrás (180 grados) Aunque no hace ni puto caso a 180gr
+    udp_socket.sendTo(command, server_udp);
+    cout << "Jugador " << player.unum << " ejecuta saque de esquina con potencia 100 y dirección hacia atrás" << endl;
+}
+
+void execute_free_kick(Player &player, MinimalSocket::udp::Udp<true> &udp_socket, MinimalSocket::Address const &server_udp)
 {
     std::string command = "(kick 100 0)";
     udp_socket.sendTo(command, server_udp);
-    cout << "Jugador " << player_id << " ejecuta saque de puerta con potencia 100" << endl;
-}
-
-void execute_throw_in(int player_id, MinimalSocket::udp::Udp<true> &udp_socket, MinimalSocket::Address const &server_udp)
-{
-    std::string command = "(kick 100 -90)"; // Potencia 100 y dirección hacia dentro del campo
-    udp_socket.sendTo(command, server_udp);
-    cout << "Jugador " << player_id << " ejecuta saque de banda con potencia 100 y dirección hacia dentro del campo" << endl;
-}
-
-void execute_corner_kick(int player_id, MinimalSocket::udp::Udp<true> &udp_socket, MinimalSocket::Address const &server_udp)
-{
-    std::string command = "(kick 100 45)"; // Potencia 100 y dirección adecuada
-    udp_socket.sendTo(command, server_udp);
-    cout << "Jugador " << player_id << " ejecuta saque de esquina con potencia 100 y dirección hacia dentro del campo" << endl;
-}
-
-void execute_free_kick(int player_id, MinimalSocket::udp::Udp<true> &udp_socket, MinimalSocket::Address const &server_udp)
-{
-    std::string command = "(kick 100 0)";
-    udp_socket.sendTo(command, server_udp);
-    cout << "Jugador " << player_id << " ejecuta falta con potencia 100" << endl;
+    cout << "Jugador " << player.unum << " ejecuta falta con potencia 100" << endl;
 }
