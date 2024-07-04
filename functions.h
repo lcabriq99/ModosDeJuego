@@ -1,35 +1,56 @@
-#pragma once
-#include<iostream>
-#include<vector>
-#include<string>
+#ifndef FUNCTIONS_H
+#define FUNCTIONS_H
+
+#include <iostream>
+#include <vector>
+#include <string>
 #include <cmath>
-#include"estructuras.h"
+#include "estructuras.h"
 #include <MinimalSocket/udp/UdpSocket.h>
 using namespace std;
 
 Player parseInitialMessage(std::string &message, Player &player);
-
-vector<string> separate_string(string & s);
-
-vector<string> separate_string_separator(string & s, string separator);
-
+vector<string> separate_string(string &s);
+vector<string> separate_string_separator(string &s, string separator);
 void store_data_see(vector<string> &see_message, Player &player, Ball &ball, Goal &own_goal, Goal &opponent_goal, Field &field);
 
-//Violeta
-//Funcion para chutar a portería
+// Función para enviar comandos de movimiento inicial
+void sendInitialMoveMessage(const Player &player, MinimalSocket::udp::Udp<true> &udp_socket, MinimalSocket::Address const &recipient);
+
+// Decisión para las acciones del jugador
+void decisionTree(Player &player, Ball &ball, Goal &opponent_goal, MinimalSocket::udp::Udp<true> &udp_socket, MinimalSocket::Address const &server_udp);
+
+// Función para chutar a portería
 void chutarPorteria(Player &player, Ball &ball, Goal &opponent_goal, MinimalSocket::udp::Udp<true> &udp_socket, MinimalSocket::Address const &server_udp);
 
-//Violeta
-//Funcion Calcular distancia del balón al propio Jugador
-float calcularDistanciaJugadorBalon(const Player& jugador, const Ball& balon);
+// Función para calcular la distancia del balón al propio jugador
+float calcularDistanciaJugadorBalon(const Player &jugador, const Ball &balon);
 
-//Violeta
-//Función para obtener el equipo, dorsal y distancia de un jugador respecto a los que puede ver
+// Función para obtener el equipo, dorsal y distancia de un jugador respecto a los que puede ver
 void procesarJugadoresVisibles(vector<string> see_message, vector<JugadorCercano> &jugadores_visibles);
 
-//Violeta
-//Función para mostrar los jugadores que ve
+// Función para mostrar los jugadores que ve
 void mostrarJugadoresVisibles(const vector<JugadorCercano> &jugadores_visibles);
 
 
+//APARTIR DE AQUÍ
 
+// Función para procesar mensajes 'hear'
+void store_data_hear(string &hear_message, MinimalSocket::udp::Udp<true> &udp_socket, MinimalSocket::Address const &server_udp);
+
+// Función para manejar modos de juego
+void handle_game_mode(const string &modo, MinimalSocket::udp::Udp<true> &udp_socket, MinimalSocket::Address const &server_udp);
+
+// Función para manejar saques de portería
+void execute_goal_kick(int player_id, MinimalSocket::udp::Udp<true> &udp_socket, MinimalSocket::Address const &server_udp);
+
+// Función para manejar saques de banda
+void execute_throw_in(int player_id, MinimalSocket::udp::Udp<true> &udp_socket, MinimalSocket::Address const &server_udp);
+
+// Función para manejar saques de esquina
+void execute_corner_kick(int player_id, MinimalSocket::udp::Udp<true> &udp_socket, MinimalSocket::Address const &server_udp);
+
+// Función para manejar faltas
+void execute_free_kick(int player_id, MinimalSocket::udp::Udp<true> &udp_socket, MinimalSocket::Address const &server_udp);
+
+#endif

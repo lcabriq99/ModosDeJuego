@@ -1,13 +1,6 @@
-// functions.cpp
-#include <iostream>
-#include <vector>
-#include <string>
-#include <stdexcept>
-#include <cmath>
-using namespace std;
-
 #include "functions.h"
-#include "estructuras.h"
+#include <iostream>
+#include <sstream>
 
 Player parseInitialMessage(std::string &message, Player &player)
 {
@@ -216,8 +209,6 @@ void store_data_see(vector<string> &see_message, Player &player, Ball &ball, Goa
     }
 }
 
-//Violeta
-// Funcion que calcula el angulo de la portería rival y chuta hacia ella
 void chutarPorteria(Player &player, Ball &ball, Goal &opponent_goal, MinimalSocket::udp::Udp<true> &udp_socket, MinimalSocket::Address const &server_udp)
 {
     float angle = opponent_goal.angle; // Ángulo hacia la portería contraria
@@ -226,28 +217,27 @@ void chutarPorteria(Player &player, Ball &ball, Goal &opponent_goal, MinimalSock
     udp_socket.sendTo(kick_command, server_udp); // Enviar comando de chute
 }
 
-//Violeta
-//Funcion que calcula la distancia del balón al propio jugador
-float calcularDistanciaJugadorBalon(const Player& jugador, const Ball& balon) {
+float calcularDistanciaJugadorBalon(const Player &jugador, const Ball &balon)
+{
     return sqrt(pow(stof(balon.x) - jugador.x, 2) + pow(stof(balon.y) - jugador.y, 2));
 }
 
-//Violeta
-//Función para extraer del mensaje del servidor el equipo, distancia y dorsal de los jugadores que puede ver
-void procesarJugadoresVisibles(vector<string> see_message, vector<JugadorCercano> &jugadores_visibles) {
+void procesarJugadoresVisibles(vector<string> see_message, vector<JugadorCercano> &jugadores_visibles)
+{
     jugadores_visibles.clear();
-    for (auto &obj : see_message) {
-        if (obj.find("(p") != string::npos && obj.find("(p)") == string::npos) {
+    for (auto &obj : see_message)
+    {
+        if (obj.find("(p") != string::npos && obj.find("(p)") == string::npos)
+        {
             vector<string> player_info = separate_string_separator(obj, " ");
             JugadorCercano jugador;
             jugador.nombreEquipo = player_info[1];
             jugador.dorsal = player_info[2];
             jugador.distancia = player_info[3];
 
-            // Al sacar el dorsal se deja detrás del número ")"
-            //Eliminamos el último carácter si es un paréntesis ')'
-            if (!jugador.dorsal.empty() && jugador.dorsal.back() == ')') {
-                jugador.dorsal.pop_back(); // Eliminar el último carácter
+            if (!jugador.dorsal.empty() && jugador.dorsal.back() == ')')
+            {
+                jugador.dorsal.pop_back();
             }
 
             jugadores_visibles.push_back(jugador);
@@ -255,15 +245,122 @@ void procesarJugadoresVisibles(vector<string> see_message, vector<JugadorCercano
     }
 }
 
-//Violeta
-//Función para mostrar los jugadores Cercanos
-void mostrarJugadoresVisibles(const vector<JugadorCercano> &jugadores_visibles) {
+void mostrarJugadoresVisibles(const vector<JugadorCercano> &jugadores_visibles)
+{
     std::cout << "Jugadores visibles: " << std::endl;
-    for (const auto &jugador : jugadores_visibles) {
-        std::cout << "Nombre Equipo: " << jugador.nombreEquipo << std::endl; //Nombre del equipo
-        std::cout << "Dorsal: " << jugador.dorsal << std::endl; //Dorsal
-        std::cout << "Distancia: " << jugador.distancia << std::endl; //Distancia
+    for (const auto &jugador : jugadores_visibles)
+    {
+        std::cout << "Nombre Equipo: " << jugador.nombreEquipo << std::endl;
+        std::cout << "Dorsal: " << jugador.dorsal << std::endl;
+        std::cout << "Distancia: " << jugador.distancia << std::endl;
     }
 }
 
 
+//APARTIR DE AQUÍ
+
+void store_data_hear(string &hear_message, MinimalSocket::udp::Udp<true> &udp_socket, MinimalSocket::Address const &server_udp)
+{
+    vector<string> aux_hear_message = separate_string(hear_message); // hear 0 referee kick_off_l
+    vector<string> valores_mensaje_Hear;
+
+    for (size_t i = 0; i < aux_hear_message.size(); i++)
+    {
+        if (aux_hear_message[i].find("hear") != string::npos)
+        {
+            valores_mensaje_Hear = separate_string_separator(aux_hear_message[i], " ");
+            if (valores_mensaje_Hear.size() >= 4)
+            {
+                cout << "TIME: " << valores_mensaje_Hear[1] << endl;
+                cout << "REFEREE: " << valores_mensaje_Hear[2] << endl;
+                cout << "MODO: " << valores_mensaje_Hear[3] << endl;
+
+                string modo = valores_mensaje_Hear[3];
+                handle_game_mode(modo, udp_socket, server_udp);
+            }
+            else
+            {
+                cout << "Error: mensaje 'hear' no tiene suficientes elementos" << endl;
+            }
+        }
+    }
+}
+
+//Para que lo entendais el numero de delante 1 o 2 es el jugador que quiero que ejecute la acción , saque de puerta solo el 1(portero)
+//Saque de banda o corner solo el 2 porque solo pruebo con 2 jugadores asi que se lo asigno al 2
+//Pero no me hace ni puto caso
+void handle_game_mode(const string &modo, MinimalSocket::udp::Udp<true> &udp_socket, MinimalSocket::Address const &server_udp)
+{
+    if (modo == "kick_off_l" || modo == "kick_off_r")
+    {
+        cout << "Saque inicial: " << modo << endl;
+    }
+    else if (modo == "free_kick_l" || modo == "free_kick_r")
+    {
+        cout << "Tiro libre: " << modo << endl;
+        execute_free_kick(1, udp_socket, server_udp); // Ejemplo de ejecución de falta
+    }
+    else if (modo == "goal_kick_l" || modo == "goal_kick_r")
+    {
+        cout << "Saque de puerta: " << modo << endl;
+        execute_goal_kick(1, udp_socket, server_udp); // Portero (jugador 1)
+    }
+    else if (modo == "corner_kick_l" || modo == "corner_kick_r")
+    {
+        cout << "Saque de esquina: " << modo << endl;
+        execute_corner_kick(2, udp_socket, server_udp); // Jugador 2
+    }
+    else if (modo == "throw_in_l" || modo == "throw_in_r")
+    {
+        cout << "Saque de banda: " << modo << endl;
+        execute_throw_in(2, udp_socket, server_udp); // Jugador 2
+    }
+    else if (modo == "offside_l" || modo == "offside_r")
+    {
+        cout << "Fuera de juego: " << modo << endl;
+    }
+    else if (modo == "goal_l" || modo == "goal_r")
+    {
+        cout << "Gol: " << modo << endl;
+    }
+    else if (modo == "play_on")
+    {
+        cout << "Juego en curso" << endl;
+    }
+    else if (modo == "time_over")
+    {
+        cout << "Fin del tiempo de juego" << endl;
+    }
+    else
+    {
+        cout << "Modo desconocido: " << modo << endl;
+    }
+}
+
+void execute_goal_kick(int player_id, MinimalSocket::udp::Udp<true> &udp_socket, MinimalSocket::Address const &server_udp)
+{
+    std::string command = "(kick 100 0)";
+    udp_socket.sendTo(command, server_udp);
+    cout << "Jugador " << player_id << " ejecuta saque de puerta con potencia 100" << endl;
+}
+
+void execute_throw_in(int player_id, MinimalSocket::udp::Udp<true> &udp_socket, MinimalSocket::Address const &server_udp)
+{
+    std::string command = "(kick 100 -90)"; // Potencia 100 y dirección hacia dentro del campo
+    udp_socket.sendTo(command, server_udp);
+    cout << "Jugador " << player_id << " ejecuta saque de banda con potencia 100 y dirección hacia dentro del campo" << endl;
+}
+
+void execute_corner_kick(int player_id, MinimalSocket::udp::Udp<true> &udp_socket, MinimalSocket::Address const &server_udp)
+{
+    std::string command = "(kick 100 45)"; // Potencia 100 y dirección adecuada
+    udp_socket.sendTo(command, server_udp);
+    cout << "Jugador " << player_id << " ejecuta saque de esquina con potencia 100 y dirección hacia dentro del campo" << endl;
+}
+
+void execute_free_kick(int player_id, MinimalSocket::udp::Udp<true> &udp_socket, MinimalSocket::Address const &server_udp)
+{
+    std::string command = "(kick 100 0)";
+    udp_socket.sendTo(command, server_udp);
+    cout << "Jugador " << player_id << " ejecuta falta con potencia 100" << endl;
+}

@@ -3,6 +3,7 @@
 
 CMakeFiles/player.dir/functions.cpp.o: ../functions.cpp \
   /usr/include/stdc-predef.h \
+  ../functions.h \
   /usr/include/c++/11/iostream \
   /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \
@@ -223,7 +224,6 @@ CMakeFiles/player.dir/functions.cpp.o: ../functions.cpp \
   /usr/include/c++/11/tr1/poly_hermite.tcc \
   /usr/include/c++/11/tr1/poly_laguerre.tcc \
   /usr/include/c++/11/tr1/riemann_zeta.tcc \
-  ../functions.h \
   ../estructuras.h \
   _deps/min_sock-src/src/header/MinimalSocket/udp/UdpSocket.h \
   _deps/min_sock-src/src/header/MinimalSocket/NonCopiable.h \
@@ -300,7 +300,9 @@ CMakeFiles/player.dir/functions.cpp.o: ../functions.cpp \
   /usr/include/c++/11/bits/node_handle.h \
   /usr/include/c++/11/bits/unordered_map.h \
   /usr/include/c++/11/bits/erase_if.h \
-  _deps/min_sock-src/src/header/MinimalSocket/core/SocketContext.h
+  _deps/min_sock-src/src/header/MinimalSocket/core/SocketContext.h \
+  /usr/include/c++/11/sstream \
+  /usr/include/c++/11/bits/sstream.tcc
 
 CMakeFiles/player.dir/main.cpp.o: ../main.cpp \
   /usr/include/stdc-predef.h \
@@ -698,14 +700,6 @@ _deps/min_sock-src/src/header/MinimalSocket/core/Sender.h:
 
 /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h:
 
-/usr/include/c++/11/cstdlib:
-
-/usr/include/c++/11/bits/stl_iterator_base_types.h:
-
-/usr/include/c++/11/bits/std_mutex.h:
-
-/usr/include/c++/11/tr1/poly_laguerre.tcc:
-
 /usr/include/c++/11/bits/ranges_uninitialized.h:
 
 /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h:
@@ -798,6 +792,10 @@ _deps/min_sock-src/src/header/MinimalSocket/core/Sender.h:
 
 ../estructuras.h:
 
+/usr/include/c++/11/clocale:
+
+/usr/include/c++/11/bits/ostream.tcc:
+
 /usr/include/x86_64-linux-gnu/bits/floatn-common.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/wint_t.h:
@@ -838,6 +836,10 @@ _deps/min_sock-src/src/header/MinimalSocket/core/Sender.h:
 
 /usr/include/c++/11/compare:
 
+/usr/include/x86_64-linux-gnu/bits/types/locale_t.h:
+
+/usr/include/x86_64-linux-gnu/bits/wctype-wchar.h:
+
 /usr/include/c++/11/tr1/gamma.tcc:
 
 /usr/include/x86_64-linux-gnu/gnu/stubs-64.h:
@@ -870,10 +872,6 @@ _deps/min_sock-src/src/header/MinimalSocket/core/Sender.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h:
 
-/usr/include/x86_64-linux-gnu/bits/types/locale_t.h:
-
-/usr/include/x86_64-linux-gnu/bits/wctype-wchar.h:
-
 /usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h:
 
 /usr/include/c++/11/bits/ostream_insert.h:
@@ -887,6 +885,8 @@ _deps/min_sock-src/src/header/MinimalSocket/core/Sender.h:
 /usr/include/x86_64-linux-gnu/asm/errno.h:
 
 /usr/include/x86_64-linux-gnu/sys/cdefs.h:
+
+../functions.h:
 
 /usr/include/c++/11/bits/stl_pair.h:
 
@@ -915,6 +915,14 @@ _deps/min_sock-src/src/header/MinimalSocket/core/Sender.h:
 /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h:
+
+/usr/include/c++/11/bits/stl_iterator_base_types.h:
+
+/usr/include/c++/11/cstdlib:
+
+/usr/include/c++/11/bits/std_mutex.h:
+
+/usr/include/c++/11/tr1/poly_laguerre.tcc:
 
 /usr/include/x86_64-linux-gnu/bits/wchar.h:
 
@@ -971,10 +979,6 @@ _deps/min_sock-src/src/header/MinimalSocket/core/Sender.h:
 /usr/include/features.h:
 
 /usr/include/c++/11/bits/iterator_concepts.h:
-
-/usr/include/c++/11/clocale:
-
-/usr/include/c++/11/bits/ostream.tcc:
 
 /usr/include/stdlib.h:
 
@@ -1177,8 +1181,6 @@ _deps/min_sock-src/src/header/MinimalSocket/core/Socket.h:
 /usr/include/c++/11/tr1/legendre_function.tcc:
 
 /usr/include/c++/11/tr1/riemann_zeta.tcc:
-
-../functions.h:
 
 _deps/min_sock-src/src/header/MinimalSocket/NonCopiable.h:
 

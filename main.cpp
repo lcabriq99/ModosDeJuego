@@ -1,5 +1,4 @@
 #include <iostream>
-using namespace std;
 #include <MinimalSocket/udp/UdpSocket.h>
 #include <chrono>
 #include <thread>
@@ -18,18 +17,8 @@ void sendInitialMoveMessage(const Player &player, MinimalSocket::udp::Udp<true> 
         int y;
     };
 
-    vector<Posicion>
-        posiciones = {{-50, 0},
-                      {-40, -10},
-                      {-35, -28},
-                      {-40, 10},
-                      {-35, 28},
-                      {-25, 11},
-                      {-8, 20},
-                      {-25, -11},
-                      {-5, 0},
-                      {-15, 0},
-                      {-8, -20}};
+    vector<Posicion> posiciones = {{-50, 0}, {-40, -10}, {-35, -28}, {-40, 10}, {-35, 28},
+                                   {-25, 11}, {-8, 20}, {-25, -11}, {-5, 0}, {-15, 0}, {-8, -20}};
 
     Posicion myPos = posiciones[player.unum - 1];
 
@@ -43,43 +32,34 @@ void decisionTree(Player &player, Ball &ball, Goal &opponent_goal, MinimalSocket
 {
     if (player.see_ball)
     {
-        //Violeta
-        // Calcular la distancia al balón respecto al jugador
         float distancia_balon = calcularDistanciaJugadorBalon(player, ball);
-        //Violeta
-        //Mostrar la distancia del jugador especto al balón
         std::cout << "Distancia al balón: " << distancia_balon << std::endl;
 
         if (ball.distance < 1)
         {
-            //Violeta
-            // Para chutar a portería
             chutarPorteria(player, ball, opponent_goal, udp_socket, server_udp);
         }
         else
         {
             if (abs(ball.angle) >= 10)
             {
-                // Rotar hacia la dirección del balón
                 int division = (ball.distance < 6) ? 20 : 5;
                 std::string rotate_command = "(turn " + to_string(ball.angle / division) + ")";
-                udp_socket.sendTo(rotate_command, server_udp); // Enviar comando de rotación
+                udp_socket.sendTo(rotate_command, server_udp);
             }
             else
             {
-                // Mover hacia el balón
                 int power = (ball.distance < 3) ? 60 : (ball.distance < 7) ? 80 : 100;
                 std::string dash_command = "(dash " + to_string(power) + " 0)";
-                udp_socket.sendTo(dash_command, server_udp); // Enviar comando de movimiento
+                udp_socket.sendTo(dash_command, server_udp);
             }
         }
     }
     else
     {
-        // Rotar para buscar el balón
         int angle = (player.y < 0) ? -80 : 80;
         std::string rotate_command = "(turn " + to_string(angle) + ")";
-        udp_socket.sendTo(rotate_command, server_udp); // Enviar comando de rotación
+        udp_socket.sendTo(rotate_command, server_udp);
     }
 }
 
@@ -114,7 +94,7 @@ int main(int argc, char *argv[])
     udp_socket.sendTo("(init " + team_name + "(version 15))", other_recipient_udp);
     cout << "Init Message sent" << endl;
 
-    std::size_t message_max_size = 1000000;
+    std::size_t message_max_size = 1000000; //ojo piojo
     cout << "Waiting for a message" << endl;
     auto received_message = udp_socket.receive(message_max_size);
     std::string received_message_content = received_message->received_message;
@@ -130,8 +110,6 @@ int main(int argc, char *argv[])
     Goal opponent_goal;
     Field field;
 
-    //Violeta
-    //Vector donde se guardan los jugadores visibles para cada jugador
     vector<JugadorCercano> jugadores_visibles;
 
     player = parseInitialMessage(received_message_content, player);
@@ -155,6 +133,7 @@ int main(int argc, char *argv[])
     float posicion_actual_x = player.x;
     float posicion_actual_y = player.y;
     float angulo_anterior = 0;
+
     while (true)
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
@@ -169,12 +148,13 @@ int main(int argc, char *argv[])
             store_data_see(see_message, player, ball, own_goal, opponent_goal, field);
             decisionTree(player, ball, opponent_goal, udp_socket, server_udp);
 
-            //Violeta
-            // Procesar jugadores visibles 
             procesarJugadoresVisibles(see_message, jugadores_visibles);
-            //Violeta
-            // Mostrar jugadores visibles
             mostrarJugadoresVisibles(jugadores_visibles);
+        }
+            //APARTIR DE AQUÍ
+        if (parsed_message[0].find("hear") != string::npos)
+        {
+            store_data_hear(parsed_message[0], udp_socket, server_udp); // Llamar función para manejar mensaje 'hear'
         }
 
         posicion_anterior_x = posicion_actual_x;

@@ -1,6 +1,6 @@
 CMakeFiles/player.dir/functions.cpp.o: \
  /home/lcabriq/oesia/TB/robocup/functions.cpp /usr/include/stdc-predef.h \
- /usr/include/c++/11/iostream \
+ /home/lcabriq/oesia/TB/robocup/functions.h /usr/include/c++/11/iostream \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \
  /usr/include/features.h /usr/include/features-time64.h \
@@ -182,7 +182,6 @@ CMakeFiles/player.dir/functions.cpp.o: \
  /usr/include/c++/11/tr1/poly_hermite.tcc \
  /usr/include/c++/11/tr1/poly_laguerre.tcc \
  /usr/include/c++/11/tr1/riemann_zeta.tcc \
- /home/lcabriq/oesia/TB/robocup/functions.h \
  /home/lcabriq/oesia/TB/robocup/estructuras.h \
  /home/lcabriq/oesia/TB/robocup/build/_deps/min_sock-src/src/header/MinimalSocket/udp/UdpSocket.h \
  /home/lcabriq/oesia/TB/robocup/build/_deps/min_sock-src/src/header/MinimalSocket/NonCopiable.h \
@@ -244,4 +243,5 @@ CMakeFiles/player.dir/functions.cpp.o: \
  /usr/include/c++/11/bits/node_handle.h \
  /usr/include/c++/11/bits/unordered_map.h \
  /usr/include/c++/11/bits/erase_if.h \
- /home/lcabriq/oesia/TB/robocup/build/_deps/min_sock-src/src/header/MinimalSocket/core/SocketContext.h
+ /home/lcabriq/oesia/TB/robocup/build/_deps/min_sock-src/src/header/MinimalSocket/core/SocketContext.h \
+ /usr/include/c++/11/sstream /usr/include/c++/11/bits/sstream.tcc
