@@ -1,6 +1,7 @@
 #include "functions.h"
 #include <iostream>
 #include <sstream>
+#include <thread> 
 
 Player parseInitialMessage(std::string &message, Player &player)
 {
@@ -263,7 +264,7 @@ void store_data_hear(string &hear_message, Player &player, MinimalSocket::udp::U
 {
     vector<string> aux_hear_message = separate_string(hear_message); // hear 0 referee kick_off_l
     vector<string> valores_mensaje_Hear;
-    
+
     for (size_t i = 0; i < aux_hear_message.size(); i++)
     {
         if (aux_hear_message[i].find("hear") != string::npos)
@@ -280,11 +281,31 @@ void store_data_hear(string &hear_message, Player &player, MinimalSocket::udp::U
             }
             else
             {
-                cout << "Error: mensaje 'hear' no tiene suficientes elementos" << endl;
+                cout << "Error: mensaje 'hear' no tiene suficientes elementos: " << aux_hear_message[i] << " (size: " << valores_mensaje_Hear.size() << ")" << endl;
+                for (size_t j = 0; j < valores_mensaje_Hear.size(); j++) {
+                    cout << "Elemento " << j << ": " << valores_mensaje_Hear[j] << endl;
+                }
             }
         }
     }
 }
+
+void orientarJugadorHaciaCampo(Player &player, MinimalSocket::udp::Udp<true> &udp_socket, MinimalSocket::Address const &server_udp)
+{
+    // Supongamos que queremos orientar al jugador hacia el centro del campo (0, 0)
+    float target_x = 0.0;
+    float target_y = 0.0;
+
+    float angle_to_target = atan2(target_y - player.y, target_x - player.x) * 180 / M_PI;
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    std::string turn_command = "(turn " + std::to_string(angle_to_target - player.angle) + ")";
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    udp_socket.sendTo(turn_command, server_udp);
+
+    //std::this_thread::sleep_for(std::chrono::milliseconds(100)); // Esperar un poco para que el jugador termine de girar
+}
+
+
 
 void handle_game_mode(const string &modo, Player &player, MinimalSocket::udp::Udp<true> &udp_socket, MinimalSocket::Address const &server_udp)
 {
@@ -347,19 +368,28 @@ void execute_goal_kick(Player &player, MinimalSocket::udp::Udp<true> &udp_socket
     cout << "Jugador " << player.unum << " ejecuta saque de puerta con potencia 100" << endl;
 }
 
-void execute_throw_in(Player &player, MinimalSocket::udp::Udp<true> &udp_socket, MinimalSocket::Address const &server_udp)
-{
-    std::string command = "(kick 100 180)"; // Potencia 100 y dirección hacia atrás (180 grados) Aunque no hace ni puto caso a 180gr
-    udp_socket.sendTo(command, server_udp);
-    cout << "Jugador " << player.unum << " ejecuta saque de banda con potencia 100 y dirección hacia atrás" << endl;
-}
-
 void execute_corner_kick(Player &player, MinimalSocket::udp::Udp<true> &udp_socket, MinimalSocket::Address const &server_udp)
 {
-    std::string command = "(kick 100 180)"; // Potencia 100 y dirección hacia atrás (180 grados) Aunque no hace ni puto caso a 180gr
+    // Orientar al jugador hacia el campo
+    orientarJugadorHaciaCampo(player, udp_socket, server_udp);
+
+    // Después de orientar al jugador, ejecutar el saque
+    std::string command = "(kick 50 0)"; // Ajustar la potencia y dirección según sea necesario
     udp_socket.sendTo(command, server_udp);
-    cout << "Jugador " << player.unum << " ejecuta saque de esquina con potencia 100 y dirección hacia atrás" << endl;
+    std::cout << "Jugador " << player.unum << " ejecuta saque de esquina con potencia 50 y dirección hacia el campo" << std::endl;
 }
+
+void execute_throw_in(Player &player, MinimalSocket::udp::Udp<true> &udp_socket, MinimalSocket::Address const &server_udp)
+{
+    // Orientar al jugador hacia el campo
+    orientarJugadorHaciaCampo(player, udp_socket, server_udp);
+
+    // Después de orientar al jugador, ejecutar el saque
+    std::string command = "(kick 50 0)"; // Ajustar la potencia y dirección según sea necesario
+    udp_socket.sendTo(command, server_udp);
+    std::cout << "Jugador " << player.unum << " ejecuta saque de banda con potencia 50 y dirección hacia el campo" << std::endl;
+}
+
 
 void execute_free_kick(Player &player, MinimalSocket::udp::Udp<true> &udp_socket, MinimalSocket::Address const &server_udp)
 {

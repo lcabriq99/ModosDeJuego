@@ -8,8 +8,7 @@
 
 
 //A PARTIR DE AQUÍ
-struct Player
-{
+struct Player {
     std::string team_name;
     std::string playmode;
     std::string side;
@@ -21,8 +20,10 @@ struct Player
     int unum;
     double x;
     double y;
-    Player() : see_ball(false), see_own_goal(false), see_opponent_goal(false), see_left_top(false), flags_seen(0), unum(0), x(0), y(0) {}
+    double angle; 
+    Player() : see_ball(false), see_own_goal(false), see_opponent_goal(false), see_left_top(false), flags_seen(0), unum(0), x(0), y(0), angle(0) {}
 };
+
 
 struct Ball
 {
